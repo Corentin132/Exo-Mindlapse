@@ -1,0 +1,31 @@
+{
+  "name": "admin-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "docker-compose up",
+    "dev:build": "docker-compose up --build",
+    "down": "docker-compose down",
+    "down:clean": "docker-compose down -v",
+    "front:dev": "pnpm --filter @admin-dashboard/front dev",
+    "front:build": "pnpm --filter @admin-dashboard/front build",
+    "front:test": "pnpm --filter @admin-dashboard/front test",
+    "front:lint": "pnpm --filter @admin-dashboard/front lint",
+    "api:dev": "pnpm --filter @admin-dashboard/api dev",
+    "api:build": "pnpm --filter @admin-dashboard/api build",
+    "api:test": "pnpm --filter @admin-dashboard/api test",
+    "api:lint": "pnpm --filter @admin-dashboard/api lint",
+    "install:all": "pnpm install"
+  },
+  "keywords": ["monorepo", "react", "adonisjs", "postgresql"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

@@ -1,19 +1,17 @@
 {
-  "extends": "adonis-preset-ts/tsconfig.json",
-  "include": ["**/*"],
-  "exclude": ["node_modules", "build"],
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
-    "outDir": "build",
     "rootDir": "./",
+    "outDir": "./build",
+    "strict": true,
     "baseUrl": "./",
-    "sourceMap": true,
     "paths": {
-      "App/*": ["./app/*"],
-      "Config/*": ["./config/*"],
-      "Contracts/*": ["./contracts/*"],
-      "Database/*": ["./database/*"],
-      "@ioc:Kysely/Database": ["./contracts/kysely"]
-    },
-    "types": ["@adonisjs/core", "@adonisjs/repl", "@japa/preset-adonis/build/adonis-typings"]
+      "#controllers/*": ["./app/controllers/*.ts"],
+      "#middleware/*": ["./app/middleware/*.ts"],
+      "#validators/*": ["./app/validators/*.ts"],
+      "#start/*": ["./start/*.ts"],
+      "#database/*": ["./database/*.ts"],
+      "#config/*": ["./config/*.ts"]
+    }
   }
 }

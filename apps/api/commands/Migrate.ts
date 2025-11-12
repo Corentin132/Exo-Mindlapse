@@ -1,6 +1,6 @@
-import { BaseCommand } from '@adonisjs/core/build/standalone'
-import Database from '@ioc:Kysely/Database'
-import { up } from '../database/migrations/0001_create_schema'
+import { BaseCommand } from '@adonisjs/core/ace'
+import { db } from '../start/kysely.js'
+import { up } from '../database/migrations/0000_create_schema.js'
 
 export default class Migrate extends BaseCommand {
   public static commandName = 'migrate'
@@ -10,7 +10,7 @@ export default class Migrate extends BaseCommand {
   }
 
   public async run() {
-    await up(Database)
+    await up(db)
     this.logger.success('Migrations applied successfully.')
   }
 }

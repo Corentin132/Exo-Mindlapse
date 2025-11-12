@@ -5,8 +5,12 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "./auth/useAuth";
+import ProductList from "./components/ProductList";
+import AppTheme from "@admin-dashboard/shared-ui/theme/AppTheme";
+import CssBaseline from "@mui/material/CssBaseline";
+import ColorModeSelect from "@admin-dashboard/shared-ui/theme/ColorModeSelect";
 
-export default function Dashboard() {
+export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -16,26 +20,32 @@ export default function Dashboard() {
   }, [logout, navigate]);
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 2,
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h4" component="h1">
-        Dashboard
-      </Typography>
-      <Typography variant="subtitle1">
-        Hello {user?.name ?? "!"} 👋. Content is coming soon.
-      </Typography>
-      <Button variant="outlined" onClick={handleLogout}>
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
+      <Button
+        variant="outlined"
+        sx={{ position: "fixed", top: "1rem", right: "8rem" }}
+        onClick={handleLogout}
+      >
         Logout
       </Button>
-    </Box>
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4" component="h1">
+          Admin Dashboard, welcome {user?.name ?? "!"} 👋 !
+        </Typography>
+        <ProductList />
+      </Box>
+    </AppTheme>
   );
 }

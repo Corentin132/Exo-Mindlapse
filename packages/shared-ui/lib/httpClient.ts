@@ -1,6 +1,7 @@
 type HeadersLike = HeadersInit | undefined;
 
 type RequestMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS" | "HEAD";
+type RequestMethodWithBody = "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface HttpClientOptions {
   baseUrl: string;
@@ -29,25 +30,24 @@ export class HttpClient {
     const targetUrl = this.resolveUrl(path);
     return fetch(targetUrl, requestInit);
   }
+  public async get(path: string, init: RequestOptions = {}): Promise<Response> {
+    return this.request(path, { ...init, method: "GET" });
+  }
+
+  public async delete(path: string, init: RequestOptions = {}): Promise<Response> {
+    return this.request(path, { ...init, method: "DELETE" });
+  }
 
   public async post(path: string, body?: unknown, init: RequestOptions = {}): Promise<Response> {
-    const preparedInit: RequestOptions = {
-      ...init,
-      method: "POST",
-      body: body !== undefined ? JSON.stringify(body) : init.body,
-      headers: this.mergeHeaders({ "Content-Type": "application/json"}, init.headers),
-      
-    };
+    return this.requestWithJsonBody("POST", path, body, init);
+  }
 
-    if (body === undefined && preparedInit.headers instanceof Headers) {
-      preparedInit.headers.delete("Content-Type");
-    } else if (body === undefined && !(preparedInit.headers instanceof Headers)) {
-      const headers = new Headers(preparedInit.headers);
-      headers.delete("Content-Type");
-      preparedInit.headers = headers;
-    }
+  public async put(path: string, body?: unknown, init: RequestOptions = {}): Promise<Response> {
+    return this.requestWithJsonBody("PUT", path, body, init);
+  }
 
-    return this.request(path, preparedInit);
+  public async patch(path: string, body?: unknown, init: RequestOptions = {}): Promise<Response> {
+    return this.requestWithJsonBody("PATCH", path, body, init);
   }
 
   private resolveUrl(path: string): string {
@@ -79,6 +79,32 @@ export class HttpClient {
       });
     }
     return result;
+  }
+
+  private requestWithJsonBody(
+    method: RequestMethodWithBody,
+    path: string,
+    body?: unknown,
+    init: RequestOptions = {}
+  ): Promise<Response> {
+    const preparedInit: RequestOptions = {
+      ...init,
+      method,
+      body: body !== undefined ? JSON.stringify(body) : init.body,
+      headers: this.mergeHeaders({ "Content-Type": "application/json" }, init.headers),
+    };
+
+    if (body === undefined) {
+      if (preparedInit.headers instanceof Headers) {
+        preparedInit.headers.delete("Content-Type");
+      } else {
+        const headers = new Headers(preparedInit.headers);
+        headers.delete("Content-Type");
+        preparedInit.headers = headers;
+      }
+    }
+
+    return this.request(path, preparedInit);
   }
 }
 

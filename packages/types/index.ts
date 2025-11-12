@@ -1,2 +1,3 @@
 // export { default as Button } from './component/button'
-// faire des exports pour chaque type ajouter 
+export type { Product } from './src/product'
+export type { User } from './src/user'

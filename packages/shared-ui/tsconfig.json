@@ -7,7 +7,13 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["react"]
+    "types": ["react", "node"]
   },
-  "include": ["index.ts", "component/**/*.ts", "component/**/*.tsx"]
+  "include": [
+    "index.ts",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "lib/**/*.ts",
+    "../../apps/front/src/SignUp.tsx"
+  ]
 }

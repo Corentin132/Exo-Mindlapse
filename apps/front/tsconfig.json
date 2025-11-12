@@ -5,7 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
+    "types": ["node"],
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -13,6 +13,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@admin-dashboard/shared-ui": ["../../packages/shared-ui"],
+      "@admin-dashboard/shared-ui/*": ["../../packages/shared-ui/*"]
+    },
 
     /* Linting */
     "strict": true,

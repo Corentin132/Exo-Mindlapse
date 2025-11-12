@@ -12,10 +12,9 @@ RUN npm install -g pnpm
 COPY apps/api ./apps/api
 
 # Installer les dépendances
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod=false
 
 WORKDIR /app/apps/api
 
 EXPOSE 3333
 
-CMD ["pnpm", "dev"]

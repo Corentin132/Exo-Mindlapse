@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
 
@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@admin-dashboard/shared-ui': path.resolve(__dirname, '../../packages/shared-ui')
+      '@admin-dashboard/shared-ui': path.resolve(__dirname, '../../packages/shared-ui'),
+      '@admin-dashboard/types': path.resolve(__dirname, '../../packages/types')
     }
   },
   server: {
@@ -17,5 +18,8 @@ export default defineConfig({
       usePolling: true
     }
   },
-
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts'
+  }
 })

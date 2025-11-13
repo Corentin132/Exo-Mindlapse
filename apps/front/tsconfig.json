@@ -16,7 +16,9 @@
     "baseUrl": "./",
     "paths": {
       "@admin-dashboard/shared-ui": ["../../packages/shared-ui"],
-      "@admin-dashboard/shared-ui/*": ["../../packages/shared-ui/*"]
+      "@admin-dashboard/shared-ui/*": ["../../packages/shared-ui/*"],
+      "@admin-dashboard/types": ["../../packages/types"],
+      "@admin-dashboard/types/*": ["../../packages/types/*"]
     },
 
     /* Linting */

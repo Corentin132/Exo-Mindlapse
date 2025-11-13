@@ -1,17 +1,13 @@
+import type { User } from "@admin-dashboard/types";
 import { createHttpClient } from "@admin-dashboard/shared-ui/lib/httpClient";
 
 import { API_BASE_URL } from "../config/api";
 
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
+export type LoginCredentials = Pick<User, "email" | "password">;
 
-export interface LoginUser {
+export type LoginUser = Omit<User, "password"> & {
   id: string;
-  name: string;
-  email: string;
-}
+};
 
 export interface LoginResult {
   token: string;

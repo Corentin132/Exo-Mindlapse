@@ -13,11 +13,7 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import AppTheme from "@admin-dashboard/shared-ui/theme/AppTheme";
 import ColorModeSelect from "@admin-dashboard/shared-ui/theme/ColorModeSelect";
-import {
-  // GoogleIcon,
-  // FacebookIcon,
-  SitemarkIcon,
-} from "@admin-dashboard/shared-ui/components/customIcons";
+import type { User } from "@admin-dashboard/types";
 import { createHttpClient } from "@admin-dashboard/shared-ui/lib/httpClient";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -152,7 +148,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     }
 
     const formData = new FormData(event.currentTarget);
-    const body = {
+    const body: User = {
       name: sanitizeInput((formData.get("name") as string | null) ?? ""),
       email: sanitizeInput((formData.get("email") as string | null) ?? ""),
       password: sanitizeInput(
@@ -203,7 +199,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <SitemarkIcon />
           <Typography
             component="h1"
             variant="h4"

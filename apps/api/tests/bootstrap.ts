@@ -4,6 +4,8 @@ import app from '@adonisjs/core/services/app'
 import type { Config } from '@japa/runner/types'
 import { pluginAdonisJS } from '@japa/plugin-adonisjs'
 import testUtils from '@adonisjs/core/services/test_utils'
+import { up, down } from '#database/migrations/0000_create_schema'
+import { db, pool } from '#start/kysely'
 
 /**
  * This file is imported by the "bin/test.ts" entrypoint file
@@ -23,8 +25,20 @@ export const plugins: Config['plugins'] = [assert(), apiClient(), pluginAdonisJS
  * The teardown functions are executed after all the tests
  */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
-  setup: [],
-  teardown: [],
+  setup: [
+    async () => {
+      await up(db)
+    },
+  ],
+  teardown: [
+    async () => {
+      await down(db)
+
+      if (typeof pool.end === 'function') {
+        await pool.end()
+      }
+    },
+  ],
 }
 
 /**

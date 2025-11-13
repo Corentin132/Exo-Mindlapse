@@ -1,41 +1,36 @@
-# Admin Dashboard - Monorepo
+# Admin Dashboard
 
-Projet monorepo avec pnpm workspaces contenant :
-- **Frontend** : React + TypeScript + Vite + ESLint + Vitest
-- **Backend** : AdonisJS + Vitest + ESLint
-- **Database** : PostgreSQL
+pnpm workspaces monorepo composed of:
 
-## 🚀 Démarrage rapide
+- **apps/front** – React app built with TypeScript and Vite (Vitest, Testing Library, ESLint)
+- **apps/api** – AdonisJS 6 API using Kysely with PostgreSQL (Japa, ESLint)
+- **packages/** – shared libraries (`shared-ui`, `types`)
 
-### Prérequis
-- Node.js >= 20
+## 🚀 Quick start
+
+### Prerequisites
+
+- Node.js >= 22
 - pnpm >= 8
-- Docker et Docker Compose
+- Docker & Docker Compose
 
-### Installation
+### Install dependencies
 
 ```bash
-# Installer les dépendances
 pnpm install
 ```
-
-### Lancer le projet avec Docker Compose
-
-```bash
-# Démarrer tous les services (Frontend, Backend, PostgreSQL)
-pnpm dev
-
-# Ou avec rebuild des images
-pnpm dev:build
-
-# Arrêter les services
-pnpm down
-
-# Arrêter et supprimer les volumes (nettoie la base de données)
-pnpm down:clean
+## Make sure to use .env.example as .env file  ! 
+```bash 
+cp ./.env.example ./.env 
 ```
 
-### Développement local (sans Docker)
+### Run with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+### Local development (without Docker)
 
 ```bash
 # Frontend (port 3000)
@@ -45,83 +40,93 @@ pnpm front:dev
 pnpm api:dev
 ```
 
-## 📦 Structure du projet
+## 📦 Repository layout
 
-```
+```text
 admin-dashboard/
 ├── apps/
-│   ├── front/          # Application React
+│   ├── front/              # React  (Vite)
 │   │   ├── src/
 │   │   ├── Dockerfile
 │   │   ├── package.json
 │   │   └── vite.config.ts
-│   └── api/            # API AdonisJS
+│   └── api/                # AdonisJS API (Japa)
 │       ├── app/
 │       ├── config/
 │       ├── database/
 │       ├── start/
+│       ├── tests/
 │       ├── Dockerfile
 │       └── package.json
-├── packages/           # Packages partagés (futurs)
+├── packages/
+│   ├── shared-ui/          # Shared UI components (MUI)
+│   │   ├── components/
+│   │   └── theme/
+│   └── types/              # Shared TypeScript types
+│       └── src/
 ├── docker-compose.yml
 ├── pnpm-workspace.yaml
-└── package.json
+├── pnpm-lock.yaml
+├── package.json
+└── README.md
 ```
 
 ## 🧪 Tests
 
 ```bash
-# Tests Frontend
+# Frontend tests
 pnpm front:test
 
-# Tests Backend
-pnpm api:test
+# API tests (Japa)
+pnpm --filter api test
 ```
 
 ## 🔍 Linting
 
 ```bash
-# Lint Frontend
+# Frontend lint
 pnpm front:lint
 
-# Lint Backend
+# API lint
 pnpm api:lint
 ```
 
-## 🌐 URLs d'accès
+## 🌐 Local endpoints
 
-- **Frontend** : http://localhost:3000
-- **Backend API** : http://localhost:3333
-- **PostgreSQL** : localhost:5432
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:3333](http://localhost:3333)
+- **PostgreSQL**: `localhost:5432`
 
-## 🗄️ Base de données
+## 🗄️ Database credentials
 
-Identifiants PostgreSQL par défaut :
-- **User** : admin
-- **Password** : admin123
-- **Database** : admin_dashboard
-- **Port** : 5432
+Default PostgreSQL configuration:
 
-## 📝 Scripts disponibles
+- **User**: admin
+- **Password**: admin123
+- **Database**: admin_dashboard
+- **Port**: 5432
 
-| Commande | Description |
-|----------|-------------|
-| `pnpm dev` | Lance tous les services avec Docker Compose |
-| `pnpm dev:build` | Lance tous les services en rebuilding les images |
-| `pnpm down` | Arrête les services Docker |
-| `pnpm down:clean` | Arrête les services et supprime les volumes |
-| `pnpm front:dev` | Lance le frontend en dev |
-| `pnpm front:build` | Build le frontend |
-| `pnpm front:test` | Lance les tests frontend |
-| `pnpm front:lint` | Lint le frontend |
-| `pnpm api:dev` | Lance l'API en dev |
-| `pnpm api:build` | Build l'API |
-| `pnpm api:test` | Lance les tests API |
-| `pnpm api:lint` | Lint l'API |
+## 📝 Available scripts
 
-## 🛠️ Technologies
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start all services with Docker Compose |
+| `pnpm dev:build` | Rebuild images then start all services |
+| `pnpm down` | Stop Docker services |
+| `pnpm down:clean` | Stop Docker services and remove volumes |
+| `pnpm front:dev` | Run the frontend in dev mode |
+| `pnpm front:build` | Build the frontend |
+| `pnpm front:test` | Run frontend tests |
+| `pnpm front:lint` | Lint the frontend |
+| `pnpm api:dev` | Run the API in dev mode |
+| `pnpm api:build` | Build the API |
+| `pnpm api:test` | Run API tests |
+| `pnpm api:lint` | Lint the API |
+
+## 🛠️ Tech stack
 
 ### Frontend
+
 - React 18
 - TypeScript
 - Vite
@@ -129,15 +134,17 @@ Identifiants PostgreSQL par défaut :
 - Vitest + Testing Library
 
 ### Backend
+
 - AdonisJS 6
 - TypeScript
-- Lucid ORM
-- Vitest
+- Kysely + PostgreSQL
+- Japa + @japa/api-client
 - ESLint
 
 ### Database
+
 - PostgreSQL 16
 
 ## 📄 License
 
-ISC
+MIT

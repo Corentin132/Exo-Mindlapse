@@ -271,7 +271,10 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             )}
             {submitSuccess && !submitError && (
               <Typography color="success.main" variant="body2">
-                Account created successfully. You can now sign in.
+                Account created successfully. You can now{" "}
+                <Link component={RouterLink} to="/signin" variant="body2">
+                  Sign in
+                </Link>
               </Typography>
             )}
           </Box>

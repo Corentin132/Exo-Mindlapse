@@ -51,29 +51,30 @@ services:
     networks:
       - admin-dashboard-network
 
-  # Frontend (React + Vite)
-  # front:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/front/Dockerfile
-  #   container_name: admin-dashboard-front
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     VITE_API_URL: http://localhost:3333
-  #   volumes:
-  #     - ./apps/front:/app/apps/front
-  #     - /app/apps/front/node_modules
-  #     - /app/node_modules
-  #   depends_on:
-  #     - api
-  #   networks:
-  #     - admin-dashboard-network
+  # Frontend
+  # docker-compose.yml (front : dev)
+  front:
+    build:
+      context: .
+      dockerfile: ./apps/front/Dockerfile
+    container_name: admin-dashboard-front
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://api:3333
+    volumes:
+      - ./apps/front:/app/apps/front # bind source
+      - admin_dashboard_front_node_modules:/app/apps/front/node_modules
+      - admin_dashboard_root_node_modules:/app/node_modules
+    command: ["sh", "-c", "pnpm install --frozen-lockfile && pnpm dev"]
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
   admin_dashboard_api_node_modules:
   admin_dashboard_root_node_modules:
+  admin_dashboard_front_node_modules:
 
 networks:
   admin-dashboard-network:

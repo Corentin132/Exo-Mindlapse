@@ -8,11 +8,16 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 # Installer pnpm
 RUN npm install -g pnpm
 
-# Copier les packages
-COPY apps/front ./apps/front
+# Pré-copier les manifests nécessaires pour optimiser le cache
+COPY packages/shared-ui/package.json ./packages/shared-ui/package.json
+COPY packages/types/package.json ./packages/types/package.json
+COPY apps/front/package.json ./apps/front/package.json
 
-# Installer les dépendances
-RUN pnpm install --frozen-lockfile
+# Installer les dépendances de l'application front et de ses workspaces liés
+RUN pnpm install --filter @admin-dashboard/front... --frozen-lockfile
+
+# Copier le reste des sources
+COPY . .
 
 WORKDIR /app/apps/front
 

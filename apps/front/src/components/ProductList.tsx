@@ -29,6 +29,7 @@ import {
   updateProduct,
 } from "../api/product";
 import { useAuth } from "../auth/useAuth";
+import { sanitizeInput } from "../lib/sanitize";
 import ProductModal from "./ProductModal";
 
 const INITIAL_PAGE_SIZE = 10;
@@ -58,7 +59,14 @@ export default function ProductList() {
 
     try {
       const result = await getProducts({ token });
-      setRows(result.items);
+      setRows(
+        result.items.map((item) => ({
+          ...item,
+          name: sanitizeInput(item.name, { trim: false }),
+          stock: Number(item.stock),
+          price: Number(item.price),
+        }))
+      );
     } catch (listError) {
       const message =
         listError instanceof Error

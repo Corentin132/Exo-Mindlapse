@@ -23,6 +23,7 @@ import AppTheme from "@admin-dashboard/shared-ui/theme/AppTheme";
 import ColorModeSelect from "@admin-dashboard/shared-ui/theme/ColorModeSelect";
 
 import { useAuth } from "./auth/useAuth";
+import { sanitizeInput } from "./lib/sanitize";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -96,17 +97,19 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
   const validateInputs = React.useCallback(() => {
     let isValid = true;
-    const trimmedEmail = email.trim();
+    const trimmedEmail = sanitizeInput(email);
 
     if (!trimmedEmail || !/\S+@\S+\.\S+/.test(trimmedEmail)) {
-      setEmailError("Veuillez saisir une adresse e-mail valide.");
+      setEmailError("Please enter a valid email address.");
       isValid = false;
     } else {
       setEmailError(null);
     }
 
-    if (!password || password.length < 6) {
-      setPasswordError("Le mot de passe doit contenir au moins 6 caractères.");
+    const sanitizedPassword = sanitizeInput(password, { trim: false });
+
+    if (!sanitizedPassword || sanitizedPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters.");
       isValid = false;
     } else {
       setPasswordError(null);
@@ -128,8 +131,8 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
       try {
         await login({
-          email: email.trim(),
-          password,
+          email: sanitizeInput(email),
+          password: sanitizeInput(password, { trim: false }),
           remember: rememberMe,
         });
         navigate(redirectPath, { replace: true });
@@ -137,7 +140,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         const message =
           error instanceof Error
             ? error.message
-            : "Une erreur inattendue est survenue.";
+            : "An unexpected error occurred.";
         setSubmitError(message);
       } finally {
         setIsSubmitting(false);
@@ -187,7 +190,9 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 variant="outlined"
                 color={emailError ? "error" : "primary"}
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) =>
+                  setEmail(sanitizeInput(event.target.value))
+                }
                 error={Boolean(emailError)}
                 helperText={emailError}
               />
@@ -205,7 +210,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 variant="outlined"
                 color={passwordError ? "error" : "primary"}
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) =>
+                  setPassword(
+                    sanitizeInput(event.target.value, { trim: false })
+                  )
+                }
                 error={Boolean(passwordError)}
                 helperText={passwordError}
               />

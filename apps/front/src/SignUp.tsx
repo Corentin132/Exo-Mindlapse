@@ -22,6 +22,7 @@ import { createHttpClient } from "@admin-dashboard/shared-ui/lib/httpClient";
 import { Link as RouterLink } from "react-router-dom";
 
 import { API_BASE_URL } from "./config/api";
+import { sanitizeInput } from "./lib/sanitize";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -92,9 +93,27 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     ) as HTMLInputElement | null;
     const name = document.getElementById("name") as HTMLInputElement | null;
 
+    const sanitizedEmail = sanitizeInput(email?.value ?? "");
+    const sanitizedPassword = sanitizeInput(password?.value ?? "", {
+      trim: false,
+    });
+    const sanitizedName = sanitizeInput(name?.value ?? "");
+
+    if (email && sanitizedEmail !== email.value) {
+      email.value = sanitizedEmail;
+    }
+
+    if (password && sanitizedPassword !== password.value) {
+      password.value = sanitizedPassword;
+    }
+
+    if (name && sanitizedName !== name.value) {
+      name.value = sanitizedName;
+    }
+
     let isValid = true;
 
-    if (!email?.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!sanitizedEmail || !/\S+@\S+\.\S+/.test(sanitizedEmail)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
       isValid = false;
@@ -103,7 +122,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       setEmailErrorMessage("");
     }
 
-    if (!password?.value || password.value.length < 6) {
+    if (!sanitizedPassword || sanitizedPassword.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters long.");
       isValid = false;
@@ -112,7 +131,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       setPasswordErrorMessage("");
     }
 
-    if (!name?.value || name.value.length < 1) {
+    if (!sanitizedName || sanitizedName.length < 1) {
       setNameError(true);
       setNameErrorMessage("Name is required.");
       isValid = false;
@@ -134,9 +153,12 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
 
     const formData = new FormData(event.currentTarget);
     const body = {
-      name: ((formData.get("name") as string | null) ?? "").trim(),
-      email: ((formData.get("email") as string | null) ?? "").trim(),
-      password: (formData.get("password") as string | null) ?? "",
+      name: sanitizeInput((formData.get("name") as string | null) ?? ""),
+      email: sanitizeInput((formData.get("email") as string | null) ?? ""),
+      password: sanitizeInput(
+        (formData.get("password") as string | null) ?? "",
+        { trim: false }
+      ),
     };
 
     setIsSubmitting(true);

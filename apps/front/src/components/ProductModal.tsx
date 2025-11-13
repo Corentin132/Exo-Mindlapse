@@ -13,6 +13,7 @@ import type { SxProps, Theme } from "@mui/material/styles";
 import * as React from "react";
 
 import type { Product } from "@admin-dashboard/types";
+import { sanitizeInput } from "../lib/sanitize";
 
 const DEFAULT_PRODUCT: Pick<Product, "name" | "price" | "stock"> = {
   name: "",
@@ -57,7 +58,7 @@ export function ProductModal({
       setValues(
         product
           ? {
-              name: product.name,
+              name: sanitizeInput(product.name, { trim: false }),
               price: product.price,
               stock: product.stock,
             }
@@ -69,8 +70,9 @@ export function ProductModal({
 
   const validate = React.useCallback(() => {
     const nextErrors: typeof errors = {};
+    const sanitizedName = sanitizeInput(values.name);
 
-    if (!values.name.trim()) {
+    if (!sanitizedName) {
       nextErrors.name = "Name is required.";
     }
 
@@ -95,7 +97,7 @@ export function ProductModal({
 
     try {
       await onSubmit({
-        name: values.name.trim(),
+        name: sanitizeInput(values.name),
         price: values.price,
         stock: values.stock,
       });
@@ -142,7 +144,10 @@ export function ProductModal({
               label="Nom"
               value={values.name}
               onChange={(event) =>
-                setValues((prev) => ({ ...prev, name: event.target.value }))
+                setValues((prev) => ({
+                  ...prev,
+                  name: sanitizeInput(event.target.value, { trim: false }),
+                }))
               }
               error={Boolean(errors.name)}
               helperText={errors.name}

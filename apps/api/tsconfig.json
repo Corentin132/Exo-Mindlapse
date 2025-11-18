@@ -9,6 +9,7 @@
       "#controllers/*": ["./app/controllers/*.ts"],
       "#middleware/*": ["./app/middleware/*.ts"],
       "#validators/*": ["./app/validators/*.ts"],
+      "#exceptions/*": ["./app/Exceptions/*.ts"],
       "#start/*": ["./start/*.ts"],
       "#database/*": ["./database/*.ts"],
       "#config/*": ["./config/*.ts"]
